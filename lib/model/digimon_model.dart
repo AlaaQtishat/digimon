@@ -12,8 +12,4 @@ class DigimonModel {
       level: json['level'],
     );
   }
-
-  Map<String, dynamic> toJson() {
-    return {'name': name, 'img': img, 'level': level};
-  }
 }

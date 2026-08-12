@@ -3,9 +3,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class CustomSearchField extends StatelessWidget {
+class CustomSearchField extends StatefulWidget {
   CustomSearchField({super.key});
+
+  @override
+  State<CustomSearchField> createState() => _CustomSearchFieldState();
+}
+
+class _CustomSearchFieldState extends State<CustomSearchField> {
   TextEditingController searchController = TextEditingController();
+  @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,10 +56,11 @@ class CustomSearchField extends StatelessWidget {
                   vertical: 12,
                 ),
                 suffixIcon: IconButton(
-                  icon: Icon(Icons.clear, color: Colors.grey, size: 20),
+                  icon: Icon(Icons.clear, color: Colors.grey, size: 18),
                   onPressed: () {
                     searchController.clear();
                     context.read<DataCubit>().fetchDigimons();
+                    FocusScope.of(context).unfocus();
                   },
                 ),
               ),

@@ -23,104 +23,111 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.black,
-      resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        centerTitle: true,
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).unfocus();
+      },
+      child: Scaffold(
         backgroundColor: Colors.black,
-        title: Text(
-          'DIGIMON',
-          style: GoogleFonts.bubblegumSans(
-            color: const Color(0xFF6B700E),
-            fontSize: 56,
-            fontWeight: FontWeight.bold,
+        resizeToAvoidBottomInset: false,
+        appBar: AppBar(
+          centerTitle: true,
+          backgroundColor: Colors.black,
+          title: Text(
+            'DIGIMON',
+            style: GoogleFonts.bubblegumSans(
+              color: const Color(0xFF6B700E),
+              fontSize: 56,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
-      ),
 
-      body: Column(
-        children: [
-          const SizedBox(height: 10),
-          CustomSearchField(),
-          const SizedBox(height: 10),
+        body: Column(
+          children: [
+            const SizedBox(height: 10),
+            CustomSearchField(),
+            const SizedBox(height: 10),
 
-          Expanded(
-            child: BlocBuilder<DataCubit, DataState>(
-              builder: (context, state) {
-                if (state is DataLoading) {
-                  return const Center(
-                    child: CircularProgressIndicator(color: Colors.white),
-                  );
-                } else if (state is DataError) {
-                  return Center(
-                    child: Text(
-                      state.message,
-                      style: const TextStyle(color: Colors.white),
-                    ),
-                  );
-                } else if (state is DataLoaded) {
-                  final digimons = state.data;
+            Expanded(
+              child: BlocBuilder<DataCubit, DataState>(
+                builder: (context, state) {
+                  if (state is DataLoading) {
+                    return const Center(
+                      child: CircularProgressIndicator(color: Colors.white),
+                    );
+                  } else if (state is DataError) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                      child: Center(
+                        child: Text(
+                          state.message,
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    );
+                  } else if (state is DataLoaded) {
+                    final digimons = state.data;
 
-                  if (digimons.isEmpty) {
-                    return Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'no data found',
-                          style: GoogleFonts.bubblegumSans(
-                            color: Colors.white,
-                            fontSize: 24,
+                    if (digimons.isEmpty) {
+                      return Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'NO DIGIMON FOUND',
+                            style: GoogleFonts.bubblegumSans(
+                              color: Colors.white,
+                              fontSize: 24,
+                            ),
                           ),
-                        ),
-                        SizedBox(height: 20),
-                        Image.asset(
-                          "images/sad_digimon.png",
-                          height: 200,
-                          width: 200,
-                          fit: BoxFit.cover,
-                        ),
-                      ],
+                          SizedBox(height: 20),
+                          Image.asset(
+                            "images/sad_digimon.png",
+                            fit: BoxFit.fitHeight,
+                            height: 150,
+                          ),
+                        ],
+                      );
+                    }
+
+                    return GridView.builder(
+                      padding: const EdgeInsets.all(24),
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 1,
+                            crossAxisSpacing: 10,
+                            mainAxisSpacing: 24,
+                            childAspectRatio: 0.85,
+                          ),
+                      itemCount: digimons.length,
+                      itemBuilder: (context, index) {
+                        final digimon = digimons[index];
+                        final isSelected = state.selectedName == digimon.name;
+
+                        return GestureDetector(
+                          onTap: () {
+                            context.read<DataCubit>().selectCard(digimon.name);
+                          },
+                          child: DigimonCard(
+                            data: digimon,
+                            isSelected: isSelected,
+                          ),
+                        );
+                      },
                     );
                   }
 
-                  return GridView.builder(
-                    padding: const EdgeInsets.all(24),
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 1,
-                          crossAxisSpacing: 10,
-                          mainAxisSpacing: 24,
-                          childAspectRatio: 0.85,
-                        ),
-                    itemCount: digimons.length,
-                    itemBuilder: (context, index) {
-                      final digimon = digimons[index];
-                      final isSelected = state.selectedName == digimon.name;
-
-                      return GestureDetector(
-                        onTap: () {
-                          context.read<DataCubit>().selectCard(digimon.name);
-                        },
-                        child: DigimonCard(
-                          data: digimon,
-                          isSelected: isSelected,
-                        ),
-                      );
-                    },
-                  );
-                }
-
-                return const SizedBox();
-              },
+                  return const SizedBox();
+                },
+              ),
             ),
-          ),
 
-          const SizedBox(height: 10),
-          const CustomPageController(),
+            const SizedBox(height: 10),
+            const CustomPageController(),
 
-          const SizedBox(height: 2),
-        ],
+            const SizedBox(height: 2),
+          ],
+        ),
       ),
     );
   }

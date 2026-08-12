@@ -60,7 +60,7 @@ class CustomPageController extends StatelessWidget {
             ),
             const SizedBox(width: 12),
             IconButton(
-              onPressed: currentPage < lastPage
+              onPressed: (currentPage != 0 && currentPage < lastPage)
                   ? () {
                       context.read<DataCubit>().nextPage();
                     }
