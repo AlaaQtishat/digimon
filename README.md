@@ -7,8 +7,8 @@ A simple, lightweight Flutter application built primarily as a hands-on project 
 <p align="center">
 <p align="center">
   <img src="https://github.com/user-attachments/assets/595fefc2-334d-41cc-922d-599936e83375" width="22%" alt="Home Screen"/> &nbsp;
-  <img src="https://github.com/user-attachments/assets/ab30b614-d7a1-4883-8f9f-f78f71f10f31" width="22%" alt="Search Feature showing results"/> &nbsp;
-  <img src="https://github.com/user-attachments/assets/03abb12b-f02d-4559-9ff0-9a67e6b02946" width="22%" alt="Search Feature no results"/> &nbsp;
+  <img src="https://github.com/user-attachments/assets/5dd759a6-e1d1-42e2-9f71-60e9401f25d9" width="22%" alt="Search Feature showing results"/> &nbsp;
+  <img src="https://github.com/user-attachments/assets/e74acb74-616c-40ee-8576-66c9e0535d12" width="22%" alt="Search Feature no results"/> &nbsp;
   <img src="https://github.com/user-attachments/assets/7d3717ae-cfd3-4670-baea-4139ffc174ac" width="22%" alt="Card Selection feature"/>
 </p>
 </p>
