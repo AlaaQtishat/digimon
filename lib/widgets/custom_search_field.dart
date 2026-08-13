@@ -58,8 +58,9 @@ class _CustomSearchFieldState extends State<CustomSearchField> {
                 suffixIcon: IconButton(
                   icon: Icon(Icons.clear, color: Colors.grey, size: 18),
                   onPressed: () {
+                    if (searchController.text.isEmpty) return;
                     searchController.clear();
-                    context.read<DataCubit>().fetchDigimons();
+                    context.read<DataCubit>().clearSearch();
                     FocusScope.of(context).unfocus();
                   },
                 ),
@@ -77,6 +78,7 @@ class _CustomSearchFieldState extends State<CustomSearchField> {
               backgroundColor: Colors.white,
             ),
             onPressed: () {
+              if (searchController.text.isEmpty) return;
               context.read<DataCubit>().searchDigimon(searchController.text);
               FocusScope.of(context).unfocus();
             },

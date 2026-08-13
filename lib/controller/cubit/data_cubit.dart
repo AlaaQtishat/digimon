@@ -46,21 +46,21 @@ class DataCubit extends Cubit<DataState> {
     }
   }
 
-  void searchDigimon(String query) {
+  Future<void> searchDigimon(String query) async {
     if (query.isEmpty) {
       _activeDigimons = _allDigimons;
     } else {
-      _activeDigimons = _allDigimons.where((digimon) {
-        return digimon.name.toLowerCase().contains(query.toLowerCase());
-      }).toList();
+      try {
+        emit(const DataLoading());
+        _activeDigimons = await digimonApi.searchBynameAndLevel(query);
+      } catch (e) {
+        final cleanMessage = e.toString().replaceAll('Exception: ', '');
+        print("--- [DataCubit] Error searching Digimons: $e ---");
+        emit(DataError(cleanMessage));
+        return;
+      }
     }
-
-    if (_activeDigimons.isEmpty) {
-      _currentPage = 0;
-    } else {
-      _currentPage = 1;
-    }
-
+    _currentPage = 1;
     _displayedDigimons = _activeDigimons.take(_itemsPerPage).toList();
 
     emit(
@@ -122,5 +122,16 @@ class DataCubit extends Cubit<DataState> {
         ),
       );
     }
+  }
+
+  void clearSearch() {
+    if (_activeDigimons.length == _allDigimons.length) return;
+    _activeDigimons = _allDigimons;
+    _currentPage = 1;
+    _displayedDigimons = _activeDigimons.take(_itemsPerPage).toList();
+
+    emit(
+      DataLoaded(data: _displayedDigimons, selectedName: _selectedDigimonName),
+    );
   }
 }

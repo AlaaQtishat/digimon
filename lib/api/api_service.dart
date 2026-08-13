@@ -36,6 +36,8 @@ class ApiService {
         );
       } else if (e.type == DioExceptionType.connectionError) {
         throw Exception('No internet connection available.');
+      } else if (e.type == DioExceptionType.badResponse) {
+        throw Exception('Data not found in database.');
       }
 
       throw Exception(
