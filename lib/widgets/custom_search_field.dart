@@ -1,23 +1,19 @@
+import 'package:digimon/constants/app_colors.dart';
 import 'package:digimon/controller/cubit/data_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class CustomSearchField extends StatefulWidget {
-  CustomSearchField({super.key});
+  final TextEditingController searchController;
+  CustomSearchField({super.key, required this.searchController});
 
   @override
   State<CustomSearchField> createState() => _CustomSearchFieldState();
 }
 
 class _CustomSearchFieldState extends State<CustomSearchField> {
-  TextEditingController searchController = TextEditingController();
   @override
-  void dispose() {
-    searchController.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -26,7 +22,7 @@ class _CustomSearchFieldState extends State<CustomSearchField> {
         children: [
           Expanded(
             child: TextField(
-              controller: searchController,
+              controller: widget.searchController,
               onSubmitted: (value) {
                 context.read<DataCubit>().searchDigimon(value);
                 FocusScope.of(context).unfocus();
@@ -39,17 +35,20 @@ class _CustomSearchFieldState extends State<CustomSearchField> {
                   fontSize: 16,
                 ),
                 filled: true,
-                fillColor: Colors.white,
+                fillColor: AppColors.secondaryColor,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(color: Color(0xFFDB2515), width: 2),
+                  borderSide: BorderSide(color: AppColors.primaryRed, width: 2),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(color: Color(0xFF0084C6), width: 2),
+                  borderSide: BorderSide(
+                    color: AppColors.primaryBlue,
+                    width: 2,
+                  ),
                 ),
                 contentPadding: const EdgeInsets.symmetric(
                   horizontal: 16,
@@ -58,8 +57,8 @@ class _CustomSearchFieldState extends State<CustomSearchField> {
                 suffixIcon: IconButton(
                   icon: Icon(Icons.clear, color: Colors.grey, size: 18),
                   onPressed: () {
-                    if (searchController.text.isEmpty) return;
-                    searchController.clear();
+                    if (widget.searchController.text.isEmpty) return;
+                    widget.searchController.clear();
                     context.read<DataCubit>().clearSearch();
                     FocusScope.of(context).unfocus();
                   },
@@ -72,14 +71,16 @@ class _CustomSearchFieldState extends State<CustomSearchField> {
             style: ElevatedButton.styleFrom(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               shape: RoundedRectangleBorder(
-                side: BorderSide(color: Color(0xFFDB2515), width: 2),
+                side: BorderSide(color: AppColors.primaryRed, width: 2),
                 borderRadius: BorderRadius.circular(12),
               ),
-              backgroundColor: Colors.white,
+              backgroundColor: AppColors.secondaryColor,
             ),
             onPressed: () {
-              if (searchController.text.isEmpty) return;
-              context.read<DataCubit>().searchDigimon(searchController.text);
+              if (widget.searchController.text.isEmpty) return;
+              context.read<DataCubit>().searchDigimon(
+                widget.searchController.text,
+              );
               FocusScope.of(context).unfocus();
             },
             child: Image.asset('images/search.png', width: 24, height: 24),

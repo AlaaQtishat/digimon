@@ -27,12 +27,9 @@ class DataCubit extends Cubit<DataState> {
     emit(const DataLoading());
     try {
       _allDigimons = await digimonApi.getDigimons();
-
       _activeDigimons = _allDigimons;
-
       _currentPage = 1;
       _displayedDigimons = _activeDigimons.take(_itemsPerPage).toList();
-
       emit(
         DataLoaded(
           data: _displayedDigimons,

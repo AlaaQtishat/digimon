@@ -4,8 +4,9 @@ import 'package:digimon/widgets/digimon_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:digimon/widgets/custom_page_controller.dart';
+import 'package:digimon/widgets/pagination_manager_widget.dart';
 import 'package:digimon/widgets/custom_search_field.dart';
+import 'package:digimon/constants/app_colors.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -21,6 +22,13 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
   }
 
+  TextEditingController searchController = TextEditingController();
+  @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -28,15 +36,15 @@ class _HomeScreenState extends State<HomeScreen> {
         FocusScope.of(context).unfocus();
       },
       child: Scaffold(
-        backgroundColor: Colors.black,
+        backgroundColor: AppColors.primaryColor,
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
           centerTitle: true,
-          backgroundColor: Colors.black,
+          backgroundColor: AppColors.primaryColor,
           title: Text(
             'DIGIMON',
             style: GoogleFonts.bubblegumSans(
-              color: const Color(0xFF6B700E),
+              color: AppColors.primaryYellow,
               fontSize: 56,
               fontWeight: FontWeight.bold,
             ),
@@ -46,29 +54,35 @@ class _HomeScreenState extends State<HomeScreen> {
         body: Column(
           children: [
             const SizedBox(height: 10),
-            CustomSearchField(),
+            CustomSearchField(searchController: searchController),
             const SizedBox(height: 10),
 
             Expanded(
               child: RefreshIndicator(
-                color: const Color(0xFFDB2515),
-                backgroundColor: Colors.white,
+                color: AppColors.primaryRed,
+                backgroundColor: AppColors.secondaryColor,
                 onRefresh: () async {
+                  searchController.clear();
                   await context.read<DataCubit>().fetchDigimons();
                 },
                 child: BlocBuilder<DataCubit, DataState>(
                   builder: (context, state) {
                     if (state is DataLoading) {
-                      return const Center(
-                        child: CircularProgressIndicator(color: Colors.white),
+                      return Center(
+                        child: CircularProgressIndicator(
+                          color: AppColors.secondaryColor,
+                        ),
                       );
                     } else if (state is DataError) {
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                        child: Center(
+                      return SingleChildScrollView(
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        child: Container(
+                          height: MediaQuery.of(context).size.height * 0.6,
+                          alignment: Alignment.center,
+                          padding: const EdgeInsets.symmetric(horizontal: 24.0),
                           child: Text(
                             state.message,
-                            style: const TextStyle(color: Colors.white),
+                            style: TextStyle(color: AppColors.secondaryColor),
                           ),
                         ),
                       );
@@ -82,7 +96,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             Text(
                               'NO DIGIMON FOUND',
                               style: GoogleFonts.bubblegumSans(
-                                color: Colors.white,
+                                color: AppColors.secondaryColor,
                                 fontSize: 24,
                               ),
                             ),
@@ -132,8 +146,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
 
             const SizedBox(height: 10),
-            const CustomPageController(),
-
+            const PaginationManagerWidget(),
             const SizedBox(height: 2),
           ],
         ),

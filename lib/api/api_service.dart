@@ -1,4 +1,6 @@
 import 'package:dio/dio.dart';
+import 'package:pretty_dio_logger/pretty_dio_logger.dart';
+import 'custom_interceptor.dart';
 
 class ApiService {
   late final Dio _dio;
@@ -10,39 +12,32 @@ class ApiService {
         connectTimeout: const Duration(seconds: 10),
       ),
     );
+
+    _dio.interceptors.add(
+      PrettyDioLogger(
+        //this is for logging the request and response in a pretty format
+        requestHeader: true,
+        requestBody: true,
+        responseBody: true,
+        responseHeader: false,
+        error: true,
+        compact: true,
+        maxWidth: 90,
+      ),
+    );
+    _dio.interceptors.add(
+      CustomInterceptor(),
+    ); //this is for handling errors and customizing error messages
   }
 
   Future<dynamic> get(String endpoint) async {
     try {
       final response = await _dio.get(endpoint);
-
-      if (response.statusCode == 200) {
-        print("--- [ApiService] Success! Data fetched from: $endpoint ---");
-        return response.data;
-      } else {
-        print(
-          "--- [ApiService] Server Error. Status Code: ${response.statusCode} ---",
-        );
-
-        throw Exception('Server error occurred. Please try again later.');
-      }
+      return response.data;
     } on DioException catch (e) {
-      print("--- [ApiService] Dio Error: ${e.message} ---");
-
-      if (e.type == DioExceptionType.connectionTimeout ||
-          e.type == DioExceptionType.receiveTimeout) {
-        throw Exception(
-          'Connection timed out. Please check your internet connection.',
-        );
-      } else if (e.type == DioExceptionType.connectionError) {
-        throw Exception('No internet connection available.');
-      } else if (e.type == DioExceptionType.badResponse) {
-        throw Exception('Data not found in database.');
-      }
-
-      throw Exception(
-        'Network error. Please check your connection and try again.',
-      );
+      throw Exception(e.error.toString());
+    } catch (e) {
+      throw Exception('Unexpected error occurred.');
     }
   }
 }

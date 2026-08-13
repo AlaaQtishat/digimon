@@ -1,9 +1,10 @@
+import 'package:digimon/constants/app_colors.dart';
 import 'package:digimon/controller/cubit/data_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class CustomPageController extends StatelessWidget {
-  const CustomPageController({super.key});
+class PaginationManagerWidget extends StatelessWidget {
+  const PaginationManagerWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +45,7 @@ class CustomPageController extends StatelessWidget {
                 child: Text(
                   '$currentPage',
                   style: const TextStyle(
-                    color: Colors.black,
+                    color: AppColors.primaryColor,
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),

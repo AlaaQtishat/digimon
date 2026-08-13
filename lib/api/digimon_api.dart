@@ -22,7 +22,6 @@ class DigimonApi {
           errorMsg.contains('timed out')) {
         rethrow;
       }
-
       try {
         final levelData = await _apiService.get('/api/digimon/level/$query');
         return (levelData as List)
@@ -30,11 +29,13 @@ class DigimonApi {
             .toList();
       } catch (e2) {
         final errorMsg2 = e2.toString().toLowerCase();
+
         if (errorMsg2.contains('internet') ||
             errorMsg2.contains('network') ||
             errorMsg2.contains('timed out')) {
           rethrow;
         }
+
         return [];
       }
     }
