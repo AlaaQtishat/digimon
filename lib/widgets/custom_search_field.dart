@@ -16,6 +16,7 @@ class _CustomSearchFieldState extends State<CustomSearchField> {
   @override
   @override
   Widget build(BuildContext context) {
+    DataCubit dataCubit = context.read<DataCubit>();
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24),
       child: Row(
@@ -24,7 +25,7 @@ class _CustomSearchFieldState extends State<CustomSearchField> {
             child: TextField(
               controller: widget.searchController,
               onSubmitted: (value) {
-                context.read<DataCubit>().searchDigimon(value);
+                dataCubit.searchDigimon(value);
                 FocusScope.of(context).unfocus();
               },
 
@@ -59,7 +60,7 @@ class _CustomSearchFieldState extends State<CustomSearchField> {
                   onPressed: () {
                     if (widget.searchController.text.isEmpty) return;
                     widget.searchController.clear();
-                    context.read<DataCubit>().clearSearch();
+                    dataCubit.clearSearch();
                     FocusScope.of(context).unfocus();
                   },
                 ),
@@ -78,9 +79,7 @@ class _CustomSearchFieldState extends State<CustomSearchField> {
             ),
             onPressed: () {
               if (widget.searchController.text.isEmpty) return;
-              context.read<DataCubit>().searchDigimon(
-                widget.searchController.text,
-              );
+              dataCubit.searchDigimon(widget.searchController.text);
               FocusScope.of(context).unfocus();
             },
             child: Image.asset('images/search.png', width: 24, height: 24),

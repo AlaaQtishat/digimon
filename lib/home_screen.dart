@@ -31,6 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    DataCubit dataCubit = context.read<DataCubit>();
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -63,7 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 backgroundColor: AppColors.secondaryColor,
                 onRefresh: () async {
                   searchController.clear();
-                  await context.read<DataCubit>().fetchDigimons();
+                  await dataCubit.fetchDigimons();
                 },
                 child: BlocBuilder<DataCubit, DataState>(
                   builder: (context, state) {
@@ -126,9 +127,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                           return GestureDetector(
                             onTap: () {
-                              context.read<DataCubit>().selectCard(
-                                digimon.name,
-                              );
+                              dataCubit.selectCard(digimon.name);
                             },
                             child: DigimonCard(
                               data: digimon,

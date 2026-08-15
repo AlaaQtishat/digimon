@@ -19,7 +19,8 @@ class DigimonApi {
       final errorMsg = e.toString().toLowerCase();
       if (errorMsg.contains('internet') ||
           errorMsg.contains('network') ||
-          errorMsg.contains('timed out')) {
+          errorMsg.contains('timed out') ||
+          e.toString().toLowerCase().contains('server')) {
         rethrow;
       }
       try {
@@ -32,7 +33,8 @@ class DigimonApi {
 
         if (errorMsg2.contains('internet') ||
             errorMsg2.contains('network') ||
-            errorMsg2.contains('timed out')) {
+            errorMsg2.contains('timed out') ||
+            e2.toString().toLowerCase().contains('server')) {
           rethrow;
         }
 
