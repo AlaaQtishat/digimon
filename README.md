@@ -14,6 +14,7 @@ A simple, lightweight Flutter application built primarily as a hands-on project 
   <img src="https://github.com/user-attachments/assets/e74acb74-616c-40ee-8576-66c9e0535d12" width="30%" alt="Search Feature no results"/> &nbsp;
   <img src="https://github.com/user-attachments/assets/fb3c2445-a5b2-4948-b7a2-4122aebb03bf" width="30%" alt="No Internet"/>
 </p>
+
 ## ✨ Key Features
 
 * **State Management (Cubit):** Utilizes `flutter_bloc` to handle the entire data flow. The UI seamlessly reacts to different states (`DataLoading`, `DataLoaded`, `DataError`) ensuring precise rebuilds and a clean separation of concerns.
