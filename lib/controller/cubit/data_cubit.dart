@@ -37,8 +37,8 @@ class DataCubit extends Cubit<DataState> {
         ),
       );
     } catch (e) {
-      final cleanMessage = e.toString().replaceAll('Exception: ', '');
-      print("--- [DataCubit] Error fetching Digimons: $e ---");
+      final cleanMessage = e.toString();
+      print("--- [DataCubit] Error fetching Digimons: $cleanMessage ---");
       emit(DataError(cleanMessage));
     }
   }
@@ -51,8 +51,9 @@ class DataCubit extends Cubit<DataState> {
         emit(const DataLoading());
         _activeDigimons = await digimonApi.searchBynameAndLevel(query);
       } catch (e) {
-        final cleanMessage = e.toString().replaceAll('Exception: ', '');
-        print("--- [DataCubit] Error searching Digimons: $e ---");
+        final cleanMessage = e.toString();
+
+        print("--- [DataCubit] Error: $cleanMessage ---");
         emit(DataError(cleanMessage));
         return;
       }
